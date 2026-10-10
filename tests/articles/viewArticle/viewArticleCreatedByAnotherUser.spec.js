@@ -4,6 +4,7 @@ import { createArticle } from '../../../src/ui/actions/articles/createArticle';
 import { signUpUser } from '../../../src/ui/actions/auth/signUpUser';
 
 test.use({ contextsNumber: 2, usersNumber: 2 });
+test.use({ contextsNumber: 3, usersNumber: 3 });
 
 test.beforeEach(async ({ pages, users, articleWithoutTags }) => {
   await signUpUser(pages[0], users[0], 1);

@@ -23,4 +23,21 @@ export class HomePage {
       await expect(this.yourFeedTab).toBeVisible();
     });
   }
+
+  async clickYourFeedTab() {
+    await this.step(`Click the 'Your Feed' tab`, async () => {
+      await this.yourFeedTab.click();
+    });
+  }
+
+  async assertArticleIsVisible(title) {
+    await this.step(
+      `Assert article '${title}' is visible in feed`,
+      async () => {
+        await expect(
+          this.page.getByRole('heading', { name: title }),
+        ).toBeVisible();
+      },
+    );
+  }
 }

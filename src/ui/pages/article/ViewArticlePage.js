@@ -4,6 +4,7 @@ export class ViewArticlePage {
   constructor(page, userId = 0) {
     this.page = page;
     this.userId = userId;
+
     this.articleTitleHeader = page.getByRole('heading');
     this.editArticleLink = page.getByRole('link', {
       name: 'Edit Article',
@@ -11,7 +12,7 @@ export class ViewArticlePage {
   }
 
   authorLinkInArticleHeader(username) {
-    return this.page.getByRole('link', { username }).first();
+    return this.page.getByRole('link', { name: username }).first();
   }
 
   tagListItem(tagName) {
@@ -74,6 +75,37 @@ export class ViewArticlePage {
       await expect(
         this.page.locator('li.tag-default.tag-pill.tag-outline'),
       ).toHaveCount(0);
+    });
+  }
+
+  async clickFollowAuthorButton(username) {
+    await this.step(`Follow author '${username}'`, async () => {
+      const followButton = this.page
+        .getByRole('button')
+        .filter({
+          hasText: new RegExp(`Follow\\s+${username}`, 'i'),
+        })
+        .first();
+
+      await expect(followButton).toBeVisible();
+
+      await followButton.click();
+
+      const unfollowButton = this.page
+        .getByRole('button')
+        .filter({
+          hasText: new RegExp(`Unfollow\\s+${username}`, 'i'),
+        })
+        .first();
+
+      await expect(unfollowButton).toBeVisible();
+    });
+  }
+
+  async followAuthor(username, articleUrl) {
+    await this.step(`Open article and follow '${username}'`, async () => {
+      await this.open(articleUrl);
+      await this.clickFollowAuthorButton(username);
     });
   }
 }
